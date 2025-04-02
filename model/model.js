@@ -1,5 +1,6 @@
+'use strict';
 const mongoose = require('mongoose');
-
+1
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
