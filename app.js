@@ -44,6 +44,16 @@ app.get('/users', async (req, res) => {
     res.status(500).send('Error fetching users');
   }
 });
+
+app.delete('/delete/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await UserSchema.findByIdAndDelete(id);
+    res.status(200).send('User deleted successfully');
+  } catch (error) {
+    res.status(500).send('Error deleting user');
+  }
+});
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
 })
