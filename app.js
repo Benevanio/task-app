@@ -4,7 +4,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const app = express();
-const UserSchema = require('./model/model');
+const UserSchema = require('./model/userModel');
+const TaskSchema = require('./model/taskModel');
 
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
@@ -52,6 +53,27 @@ app.delete('/delete/:id', async (req, res) => {
     res.status(200).send('User deleted successfully');
   } catch (error) {
     res.status(500).send('Error deleting user');
+  }
+});
+
+app.post('/tasks', async (req, res) => {
+  const { title, description , completed} = req.body;
+  try {
+    const task = new TaskSchema({ title, description , completed});
+    await task.save();
+    res.status(201).send('Task created successfully');
+  } catch (error) {
+    res.status(400).send('Error creating task');
+  }
+});
+
+
+app.get('/tasks', async (req, res) => {
+  try {
+    const tasks = await TaskSchema.find();
+    res.status(200).json(tasks);
+  } catch (error) {
+    res.status(500).send('Error fetching tasks');
   }
 });
 app.listen(process.env.PORT, () => {
