@@ -2,12 +2,9 @@ const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express');
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 
-
-
+const UserRoutes = require('./routes/userRoutes');
 const app = express();
-const UserSchema = require('./model/userModel');
 const TaskSchema = require('./model/taskModel');
 
 mongoose.connect(process.env.MONGO_URL)
@@ -17,45 +14,12 @@ mongoose.connect(process.env.MONGO_URL)
   .catch((err) => {
     console.error('MongoDB connection error:', err);
   });
-
-
 app.use(express.json());
 
-
+app.use(express.urlencoded({ extended: true }));
+app.use('/api', UserRoutes);
 app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
-
-app.post('/register', async (req, res) => {
-  const { name, email, password } = req.body;
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new UserSchema({ name, email, password: hashedPassword });
-    await user.save();
-    res.status(201).send('User registered successfully');
-
-  } catch (error) {
-    res.status(400).send('Error registering user'+ error);
-  }
-});
-
-app.get('/users', async (req, res) => {
-  try {
-    const users = await UserSchema.find();
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(500).send('Error fetching users');
-  }
-});
-
-app.delete('/delete/:id', async (req, res) => {
-  const { id } = req.params;
-  try {
-    await UserSchema.findByIdAndDelete(id);
-    res.status(200).send('User deleted successfully');
-  } catch (error) {
-    res.status(500).send('Error deleting user');
-  }
+  res.send('Welcome to the Task Management API');
 });
 
 app.post('/tasks', async (req, res) => {
