@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const UserSchema = require('../model/userModel');
 const bcrypt = require('bcrypt');
-router.get('/users',async (req, res, next) => {
+router.get('/users',async (req, res, _next) => {
     try {
         const users = await UserSchema.find();
         res.status(200).json(users);
@@ -14,7 +14,7 @@ router.get('/users',async (req, res, next) => {
     }
 }
 );
-router.post('/register', async (req, res, next) => {
+router.post('/register', async (req, res, _next) => {
     const { name, email, password } = req.body;
     try {
         const jwtToken = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
