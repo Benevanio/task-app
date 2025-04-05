@@ -21,10 +21,8 @@ router.post('/register', async (req, res, next) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = new UserSchema({ name, email, password: hashedPassword });
         user.token = jwtToken;
-        console.log(jwtToken);
-
         await user.save();
-        res.status(201).send('User registered successfully' + user);
+        res.status(201).json({ user, token: jwtToken });
     } catch (error) {
         res.status(400).send('Error registering user' + error);
     }
