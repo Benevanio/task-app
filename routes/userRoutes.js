@@ -17,7 +17,7 @@ router.get('/users',async (req, res, _next) => {
 router.post('/register', async (req, res, _next) => {
     const { name, email, password } = req.body;
     try {
-        const jwtToken = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const jwtToken = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '24h' });
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = new UserSchema({ name, email, password: hashedPassword });
         user.token = jwtToken;
