@@ -7,7 +7,7 @@ const UserRoutes = require('./routes/userRoutes');
 const TaskRoutes = require('./routes/taskRoutes');
 const app = express();
 
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGO_URL) 
   .then(() => {
     console.log('MongoDB connected');
   })
