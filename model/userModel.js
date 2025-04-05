@@ -6,6 +6,13 @@ const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        trim: true,
+        validate: {
+            validator: (value) => {
+                return value.length >= 3;
+            },
+            message: (props) => `Name must be at least 3 characters long! ${props.value}`,
+        },
     },
     email: {
         type: String,
@@ -29,7 +36,7 @@ const userSchema = new mongoose.Schema({
                 return value.length >= 6;
             },
             message: (props) => `Password must be at least 6 characters long! ${props.value}`,
-            
+
         },
 
     },
