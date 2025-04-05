@@ -2,10 +2,13 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+
 dotenv.config();
 const UserSchema = require('../model/userModel');
 const bcrypt = require('bcrypt');
-router.get('/users',async (req, res, _next) => {
+const authMiddleware = require('../middlewares/authMiddleware');
+router.use(authMiddleware);
+router.get('/users', authMiddleware, async (req, res) => {
     try {
         const users = await UserSchema.find();
         res.status(200).json(users);
@@ -14,7 +17,7 @@ router.get('/users',async (req, res, _next) => {
     }
 }
 );
-router.post('/register', async (req, res, _next) => {
+router.post('/register',authMiddleware, async (req, res, _next) => {
     const { name, email, password } = req.body;
     try {
         const jwtToken = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '24h' });
@@ -29,7 +32,7 @@ router.post('/register', async (req, res, _next) => {
 }
 );
 
-router.delete('/delete/:id', async (req, res) => {
+router.delete('/delete/:id',authMiddleware, async (req, res) => {
     const { id } = req.params;
     try {
         await UserSchema.findByIdAndDelete(id);
@@ -40,7 +43,7 @@ router.delete('/delete/:id', async (req, res) => {
 }
 );
 
-router.patch('/update/:id', async (req, res) => {
+router.patch('/update/:id',authMiddleware, async (req, res) => {
     const { id } = req.params;
     const { name, email, password } = req.body;
     try {

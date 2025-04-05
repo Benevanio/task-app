@@ -4,7 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const UserRoutes = require('./routes/userRoutes');
-const TaskRoutes = require('./routes/taskRoutes');
+const TaskRoutes = require('./routes/taskRoutes')
 const app = express();
 
 mongoose.connect(process.env.MONGO_URL) 
@@ -17,6 +17,8 @@ mongoose.connect(process.env.MONGO_URL)
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
+
+
 app.use('/api', UserRoutes);
 app.use('/api', TaskRoutes);
 app.get('/', (req, res) => {
