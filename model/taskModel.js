@@ -1,9 +1,17 @@
 const mongoose = require('mongoose');
-
+const validator = require('validator');
 const taskSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
+        trim: true,
+        unique: true,
+        validate: {
+            validator: (value) => {
+                return value.length >= 3;
+            },
+            message: (props) => `Title must be at least 3 characters long! ${props.value}`,
+        },
     },
     description: {
         type: String,

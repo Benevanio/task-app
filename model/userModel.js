@@ -1,7 +1,6 @@
 'use strict';
 const mongoose = require('mongoose');
 const validator = require('validator');
-1
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -38,6 +37,11 @@ const userSchema = new mongoose.Schema({
             message: (props) => `Password must be at least 6 characters long! ${props.value}`,
 
         },
+        owner:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        }
 
     },
 })

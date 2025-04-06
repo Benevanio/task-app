@@ -2,8 +2,10 @@ const express = require('express');
 const routerTask = express.Router();
 
 const TaskSchema = require('../model/taskModel');
+const authMiddleware = require('../middlewares/authMiddleware');
 
-routerTask.post('/tasks', async (req, res) => {
+routerTask.post('/tasks',authMiddleware, async (req, res) => {
+    
     const { title, description, completed } = req.body;
     try {
         const task = new TaskSchema({ title, description, completed });
@@ -13,7 +15,7 @@ routerTask.post('/tasks', async (req, res) => {
         res.status(400).json({ error: 'Error creating task' });
     }
     });
-routerTask.get('/tasks', async (req, res) => {
+routerTask.get('/tasks',authMiddleware, async (req, res) => {
     try {
         const tasks = await TaskSchema.find();
         res.status(200).json(tasks);
@@ -23,7 +25,7 @@ routerTask.get('/tasks', async (req, res) => {
 }
 );
 
-routerTask.delete('/tasks/:id', async (req, res) => {
+routerTask.delete('/tasks/:id',authMiddleware, async (req, res) => {
     const { id } = req.params;
     try {
         await TaskSchema.findByIdAndDelete(id);
@@ -34,7 +36,7 @@ routerTask.delete('/tasks/:id', async (req, res) => {
 }
 );
 
-routerTask.patch('/tasks/:id', async (req, res) => {
+routerTask.patch('/tasks/:id',authMiddleware, async (req, res) => {
     const { id } = req.params;
     const { title, description, completed } = req.body;
     try {
