@@ -4,8 +4,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 
-const UserRoutes = require('./routes/userRoutes');
-const TaskRoutes = require('./routes/taskRoutes')
+const UserRoutes = require('./src/routes/userRoutes');
+const TaskRoutes = require('./src/routes/taskRoutes')
 const app = express();
 
 mongoose.connect(process.env.MONGO_URL) 
