@@ -18,7 +18,7 @@ routerTask.get('/tasks', async (req, res) => {
         const tasks = await TaskSchema.find();
         res.status(200).json(tasks);
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching tasks' });
+        res.status(500).json({ error: 'Error fetching tasks', error });
     }
 }
 );
