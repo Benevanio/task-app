@@ -12,7 +12,7 @@ routerTask.post('/tasks',authMiddleware, async (req, res) => {
         await task.save();
         res.status(201).json(task);
     } catch (error) {
-        res.status(400).json({ error: 'Error creating task' });
+        res.status(400).json({ error: 'Error creating task', error });
     }
     });
 routerTask.get('/tasks',authMiddleware, async (req, res) => {
@@ -43,7 +43,7 @@ routerTask.patch('/tasks/:id',authMiddleware, async (req, res) => {
         const task = await TaskSchema.findByIdAndUpdate(id, { title, description, completed }, { new: true });
         res.status(200).json(task);
     } catch (error) {
-        res.status(500).json({ error: 'Error updating task' });
+        res.status(500).json({ error: 'Error updating task' , error});
     }
 }
 );
