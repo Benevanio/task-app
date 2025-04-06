@@ -16,6 +16,16 @@ routerTask.post('/tasks',authMiddleware, async (req, res) => {
     }
     });
 routerTask.get('/tasks',authMiddleware, async (req, res) => {
+    if(req.query.completed) {
+        const completed = req.query.completed === 'true';
+        try {
+            const tasks = await TaskSchema.find({ completed });
+            res.status(200).json(tasks);
+        } catch (error) {
+            res.status(500).json({ error: 'Error fetching tasks', error });
+        }
+        return;
+    }
     try {
         const tasks = await TaskSchema.find();
         res.status(200).json(tasks);
