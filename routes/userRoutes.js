@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const multer = require('multer');
+const upload = multer({ dest: 'images' });
 
 dotenv.config();
 const UserSchema = require('../model/userModel');
@@ -55,5 +57,28 @@ router.patch('/update/:id',authMiddleware, async (req, res) => {
     }
 });
 
+router.post('/avatar', authMiddleware, upload.single('avatar'), async (req, res) => {
+    const { id } = req.user;
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded' });
+        }
+        
+        const user = await UserSchema.findById(id);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        user.avatar = req.file.path;
+        await user.save();
+        res.status(200).json(user);
+    } catch (error) {
+        console.error('Avatar upload error:', error);
+        res.status(500).json({ 
+            error: 'Error uploading avatar',
+            details: error.message 
+        });
+    }
+});
 
 module.exports = router;

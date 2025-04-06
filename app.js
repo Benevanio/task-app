@@ -3,6 +3,7 @@ dotenv.config();
 const express = require('express');
 const mongoose = require('mongoose');
 
+
 const UserRoutes = require('./routes/userRoutes');
 const TaskRoutes = require('./routes/taskRoutes')
 const app = express();
@@ -24,6 +25,7 @@ app.use('/api', TaskRoutes);
 app.get('/', (req, res) => {
   res.send('Welcome to the Task Management API');
 });
+
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
