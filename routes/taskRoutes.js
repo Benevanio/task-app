@@ -31,7 +31,7 @@ routerTask.delete('/tasks/:id',authMiddleware, async (req, res) => {
         await TaskSchema.findByIdAndDelete(id);
         res.status(200).json({ message: 'Task deleted successfully' });
     } catch (error) {
-        res.status(500).json({ error: 'Error deleting task' });
+        res.status(500).json({ error: 'Error deleting task', error });
     }
 }
 );
