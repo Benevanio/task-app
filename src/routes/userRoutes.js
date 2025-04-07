@@ -9,7 +9,7 @@ dotenv.config();
 const UserSchema = require('../model/userModel');
 const bcrypt = require('bcrypt');
 const authMiddleware = require('../middlewares/authMiddleware');
-router.use(authMiddleware);
+//router.use(authMiddleware);
 router.get('/users', authMiddleware, async (req, res) => {
     try {
         const users = await UserSchema.find();
@@ -33,6 +33,33 @@ router.post('/register',authMiddleware, async (req, res, _next) => {
     }
 }
 );
+
+
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await UserSchema.findOne({ email });
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).send('Invalid credentials');
+        }
+
+        const token = jwt.sign(
+            { id: user._id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        res.status(200).json({ message: 'Login successful', token, user });
+    } catch (error) {
+        res.status(500).send('Error logging in: ' + error.message);
+    }
+});
+
 
 router.delete('/delete/:id',authMiddleware, async (req, res) => {
     const { id } = req.params;
